@@ -1,1 +1,269 @@
 <h1>Hello World</h1>
+
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <title>ngage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/backend/css/style.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ asset('public/backend/css/responsive.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="{{ asset('public/backend/css/bootstrap.min.css') }}"> -->
+    <link href="{{ asset('public/backend/css/mdb.min.css') }}" rel="stylesheet" />
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+
+<style>
+.p_form{
+  padding: 0% 20% 10% 20%;
+}
+.form-outline .form-control ~ .form-label {
+  color: #4f4f4f;
+}
+.form-control{
+  color: white !important;
+}
+
+@media (max-width: 767px)
+{
+  .p_form{
+    padding: 20% 0%;
+    height:  100vh;
+  } 
+}
+
+</style>
+
+<body>
+  <div class="container">
+    <div classs="row">
+      <div class="col-md-12">
+        <div class="text-center mb-3 p-3">
+          <img src="{{ asset('public/backend/images/logo.png') }}" width="200px" />
+        </div>
+      </div>
+      <div class="col-md-12 p_form login_signup_frm">
+        
+        <!-- <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
+          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+          <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+        </div> -->
+
+
+        <!-- Pills navs -->
+
+        <?php 
+          $login_active = 'show active';
+          $register_active = '';
+        ?>
+        @if(Session::get('register_error'))
+          <?php 
+            $login_active = '';
+            $register_active = 'show active';
+          ?>
+        @endif
+
+
+        <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {{$login_active}}" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
+              aria-controls="pills-login" aria-selected="true">Login</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {{$register_active}}" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
+              aria-controls="pills-register" aria-selected="false">Create Account</a>
+          </li>
+        </ul>
+        <!-- Pills navs -->
+
+        
+
+
+        <!-- Pills content -->
+        <div class="tab-content">
+          <div class="tab-pane fade {{$login_active}}" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+
+            <div class="text-center mb-3 p-3">
+              <h2>Sign In</h2>
+            </div>
+
+            @if(Session::get('login_error'))
+            <p class="text-danger">{{ Session::get('login_error') }}</p>
+            @endif
+            
+            <form action="{{ route('login.validation') }}" method="post">
+
+              @csrf
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="loginName" name="useremail" placeholder="Email or username" class="form-control" required />
+                <label class="form-label" for="loginName">Email or username</label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="loginPassword" name="password" placeholder="Password" class="form-control" required />
+                <label class="form-label" for="loginPassword">Password</label>
+              </div>
+
+            
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+              <!-- Register buttons -->
+              <div class="text-center">
+                <p><a href="javascript:void(0)" onClick="st('forget_form','login_signup_frm')" style="color: #33bdff; text-decoration:none;">Forgot password?</a></p>
+              </div>
+            </form>
+          </div>
+          <div class="tab-pane fade {{$register_active}}" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+
+            <div class="text-center mb-3 p-3">
+              <h2>Create Your Profile</h2>
+            </div>
+
+            @if(Session::get('register_error'))
+            <p class="text-danger">{{ Session::get('register_error') }}</p>
+            @endif
+
+            <form action="{{ route('registration.store') }}" method="post">
+
+              @csrf
+
+              <!-- Name input -->
+              <div class="form-outline mb-4">
+                <input type="text" name="name" placeholder="Full name (visible on profile)" class="form-control" required/>
+                <label class="form-label" for="name">Name</label>
+              </div>
+
+              <!-- Username input -->
+              <div class="form-outline mb-4">
+                <input type="text" name="username" placeholder="Username (www.n-gage.tech/username)" class="form-control" required/>
+                <label class="form-label" for="username">Username</label>
+              </div>
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" name="useremail" placeholder="Email" class="form-control" required/>
+                <label class="form-label" for="useremail">Email</label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="text" name="serial" placeholder="ngage Card Serial Number" class="form-control" required/>
+                <label class="form-label" for="serial">Serial</label>
+              </div>
+
+              <!-- Repeat Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" name="password" placeholder="Password" class="form-control" required/>
+                <label class="form-label" for="password">Password</label>
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-3">Create Account</button>
+            </form>
+          </div>
+
+          <div class="tab-pane fade" id="pills-forget" role="tabpanel" aria-labelledby="tab-forget">
+
+            
+          </div>
+        </div>
+        <!-- Pills content -->
+
+
+      </div>
+      <div class="col-md-12 p_form forget_form" style="display:none">
+        <div class="text-center mb-3 p-3">
+            <h2>Verify Email</h2>
+          </div>
+
+            <form action="https://n-gage.tech/login" method="post" id="forgot_frm">
+
+              @csrf
+
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="loginName" name="useremail" placeholder="Email" class="form-control" required />
+                <label class="form-label" for="loginName">Email</label>
+              </div>
+
+            
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">Verify Email</button>
+
+              <!-- Register buttons -->
+              <div class="text-center">
+                <p><a href="javascript:void(0)" onClick="st('forget_form','login_signup_frm')" >Back to Login</a></p>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="profile_preview col-lg-12 col-sm-12 col-xs-12">
+        <div class="register_form">
+            <h1><img src="{{ asset('public/backend/images/logo.png') }}"/></h1>
+            <h5>Create Your Profile.</h5>
+            @if(Session::get('error'))
+            <p>{{ Session::get('error') }}</p>
+            @endif
+            <form action="{{ route('registration.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Full name (visible on profile)" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username (www.n-gage.tech/username)" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="useremail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="serial" placeholder="ngage Card Serial Number" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <button>Create Account</button><br><br>
+                <p style="text-align:center">Already have an account?  <a href="{{ route('login') }}">Click here</a>  to login.</p>
+            </form>
+        </div>
+    </div> -->
+    <script src="{{ asset('public/backend/js/jquery.min.js') }}" ></script>
+    <!-- <script src="{{ asset('public/backend/js/bootstrap.min.js') }}"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+    <!-- MDB -->
+    <script type="text/javascript" src="{{ asset('public/backend/js/mdb.min.js') }}"></script>
+
+    <script>
+
+    function st(varx,vary){
+
+      jQuery('.'+vary).slideToggle();
+
+      jQuery('.'+varx).slideToggle();
+
+    }
+
+  </script>
+    
+</body>
+</html>
